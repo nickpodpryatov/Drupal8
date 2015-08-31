@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)http://www.webomelette.com/creating-custom-views-field-drupal-8 -->
+<html lang="en" dir="ltr" class="js"><head profile="http://www.w3.org/1999/xhtml/vocab"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<![endif]-->
+<link rel="shortlink" href="http://www.webomelette.com/node/900">
+<link rel="shortcut icon" href="http://www.webomelette.com/misc/favicon.ico" type="image/vnd.microsoft.icon">
+<link rel="canonical" href="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/Creating a custom Views field in Drupal 8 _ Web Omelette.html">
+<meta name="generator" content="Drupal 7 (http://drupal.org)">
+<link rel="author" href="https://plus.google.com/+DanielSipos/about">
+<div class="fit-vids-style">­<style>               .fluid-width-video-wrapper {                 width: 100%;                              position: relative;                       padding: 0;                            }                                                                                   .fluid-width-video-wrapper iframe,        .fluid-width-video-wrapper object,        .fluid-width-video-wrapper embed {           position: absolute;                       top: 0;                                   left: 0;                                  width: 100%;                              height: 100%;                          }                                       </style></div><script async="" src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/prum.min.js"></script><script type="text/javascript" async="" src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/ga.js"></script><script type="application/ld+json">{"@context":"http:\/\/schema.org","@type":"TechArticle","headline":"Creating a custom Views field in Drupal 8","url":"http:\/\/www.webomelette.com\/creating-custom-views-field-drupal-8","datePublished":"2015-01-19T09:10:32+01:00","articleSection":["Drupal 8","Drupal"],"description":"\u003Cp\u003EIn this article I am going to show you how to create a custom Views field in Drupal 8. At the end of this tutorial, you will be able to add a new field to any node based View which will flag (by displaying a specific message) the nodes of a particular type (configurable in the field configuration). Although I will use nodes, you can use this example to create custom fields for other entities as well.\u003C\/p\u003E\n\n\u003Cp\u003ESo let\u0027s get started by creating a small module called \u003Ccode\u003Ed8views\u003C\/code\u003E (which you can also find in \u003Ca href=\u0022https:\/\/github.com\/upchuk\/d8views\u0022\u003Ethis repository\u003C\/a\u003E):\u003C\/p\u003E","author":{"@type":"Person","givenName":"Daniel","familyName":"Sipos","sameAs":["https:\/\/plus.google.com\/+DanielSipos","https:\/\/twitter.com\/drupalexp","https:\/\/github.com\/upchuk","http:\/\/www.sitepoint.com\/author\/dsipos\/"]}}</script><meta name="description" content="In this article I am going to show you how to create a custom Views field in Drupal 8.">
+  <title>Creating a custom Views field in Drupal 8 | Web Omelette</title>
+  <link type="text/css" rel="stylesheet" href="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/css___xXpVimnRxUx7vdHPXuUD4p-NwgcMT6bSvcKul70iMU__-fOb5kqgYxpAY34D9QQ958EDJ8X0KZwFBlwPr0t2PHY__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.css" media="all">
+<style>.url-textfield{display:none !important;}
+</style>
+<link type="text/css" rel="stylesheet" href="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/bootstrap-combined.min.css" media="all">
+<link type="text/css" rel="stylesheet" href="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/css__nCQh0a__3icJL1xDXwHs5n8TDU3fT4NjTkbsuWgU4vo__GHLyPERZ0t-xVdHHsdsPxGan8WHudR_H4IOwYG6PBm4__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.css" media="all">
+<link type="text/css" rel="stylesheet" href="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/css" media="all">
+  <!-- HTML5 element support for IE6-8 -->
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/js__dWB41HViTcqoYHrbrlBHs8x9iwtFdMHpl7ME-vPjr-A__Wss9GQOpbLvVxTpCYuBVmK7YH7I84NFx_eq_XIx4XnQ__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.js"></script><style type="text/css"></style>
+<script src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/js__dTRSuW27RiJte-z_L4Px_rno5dZsdWKiU3HtuBiTSmc__aUyjTwbuXgq-_Uz9tDAnTYqY6lDlpjjGUytgmx2VKHM__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.js"></script>
+<script>var _gaq = _gaq || [];_gaq.push(["_setAccount", "UA-36988727-1"]);_gaq.push(["_trackPageview"]);(function() {var ga = document.createElement("script");ga.type = "text/javascript";ga.async = true;ga.src = ("https:" == document.location.protocol ? "https://ssl" : "http://www") + ".google-analytics.com/ga.js";var s = document.getElementsByTagName("script")[0];s.parentNode.insertBefore(ga, s);})();</script>
+<script>
+    var _prum = [['id', '54c61e29abe53d2732cdccb2'],
+             ['mark', 'firstbyte', (new Date()).getTime()]];
+(function() {
+    var s = document.getElementsByTagName('script')[0]
+      , p = document.createElement('script');
+    p.async = 'async';
+    p.src = '//rum-static.pingdom.net/prum.min.js';
+    s.parentNode.insertBefore(p, s);
+})();
+  </script>
+<script>jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"webomelette","theme_token":"xOtOVtTcC8kdgwjA-77CqTk1mYK46GNYj6GAeM5dRww","css":{"modules\/system\/system.base.css":1,"sites\/all\/modules\/comment_notify\/comment_notify.css":1,"modules\/field\/theme\/field.css":1,"sites\/all\/modules\/mollom\/mollom.css":1,"sites\/all\/modules\/views\/css\/views.css":1,"sites\/all\/modules\/codefilter\/codefilter.css":1,"sites\/all\/modules\/ctools\/css\/ctools.css":1,"0":1,"\/\/netdna.bootstrapcdn.com\/twitter-bootstrap\/2.3.2\/css\/bootstrap-combined.min.css":1,"sites\/all\/themes\/bootstrap\/css\/overrides.css":1,"sites\/all\/themes\/webomelette\/css\/bootstrap.min.css":1,"sites\/all\/themes\/webomelette\/css\/bootstrap-responsive.min.css":1,"sites\/all\/themes\/webomelette\/..\/bootstrap\/css\/overrides.css":1,"sites\/all\/themes\/webomelette\/css\/style.css":1,"http:\/\/fonts.googleapis.com\/css?family=PT+Sans:400,700|Indie+Flower":1},"js":{"sites\/all\/modules\/jquery_update\/replace\/jquery\/1.7\/jquery.min.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/modules\/google_analytics\/googleanalytics.js":1}},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls|xml|z|zip"}});</script>
+<script type="text/javascript" src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/getAllAppDefault.esi"></script><script type="text/javascript" src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/checkOAuth.esi"></script><link rel="stylesheet" type="text/css" href="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/buttons.4d4008011051a133a045fe92d3143ad4.css"></head>
+<body class="html not-front not-logged-in one-sidebar sidebar-second page-node page-node- page-node-900 node-type-article" cz-shortcut-listen="true">
+  <div id="skip-link">
+    <a href="http://www.webomelette.com/creating-custom-views-field-drupal-8#main-content" class="element-invisible element-focusable">Skip to main content</a>
+  </div>
+    <header id="navbar" role="banner" class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container">
+      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+      <a class="btn btn-navbar collapse-button" data-toggle="collapse" data-target=".nav-collapse"></a>
+
+              <a class="logo pull-left" href="http://www.webomelette.com/" title="Home">
+          <img src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/logo.png" alt="Home">
+        </a>
+      
+      
+              <div class="nav-collapse collapse">
+          <nav role="navigation">
+                          <ul class="menu nav"><li class="first leaf"><a href="http://www.webomelette.com/">Home</a></li>
+<li class="leaf"><a href="http://www.webomelette.com/about">About</a></li>
+<li class="last leaf"><a href="http://www.webomelette.com/contact" title="">Contact</a></li>
+</ul>                           
+                        <div class="social-buttons pull-right">
+              <span>Follow me » </span>
+              <a href="https://plus.google.com/108348304499127607046/posts" target="_blank"><div id="plus-btn" alt="Google +"></div></a>
+              <a href="https://twitter.com/drupalexp" target="_blank"><div id="twitter-btn" alt="twitter"></div></a>
+              <a href="http://www.youtube.com/channel/UCCyd_Ofes_tFEUadciq_MfA" target="_blank"><div id="youtube-btn" alt="Youtube"></div></a>
+              <a href="http://www.webomelette.com/rss" target="_blank"><div id="rss-btn" alt="RSS"></div></a>
+             </div>
+          </nav>
+        </div>
+          </div>
+  </div>
+</header>
+
+<div class="main-container container">
+
+  <header role="banner" id="page-header">
+    
+      </header> <!-- /#header -->
+
+  
+  <div class="row-fluid">
+
+      
+    
+    <section class="span8">  
+            
+      <a id="main-content"></a>
+                    <h1 class="page-header">Creating a custom Views field in Drupal 8</h1>
+                                                        
+<article id="node-900" class="node node-article node-promoted clearfix">
+
+
+  <header class="article_header">
+                
+          <div class="submitted">
+
+                <span class="submitted-date-small">Monday, January 19, 2015 by <span class="username">Daniel Sipos</span></span>
+        <div class="field field-name-field-categories field-type-taxonomy-term-reference field-label-hidden">In <span class="field-items"><span class="field-item even"><a href="http://www.webomelette.com/drupal-8">Drupal 8</a></span> | <span class="field-item odd"><a href="http://www.webomelette.com/drupal">Drupal</a></span></span></div>        <div class="sharethis"><span class="share-message">Share this post</span><div class="sharethis-buttons"><div class="sharethis-wrapper"><span st_url="http://www.webomelette.com/creating-custom-views-field-drupal-8" st_title="Creating a custom Views field in Drupal 8" class="st_facebook" st_processed="yes"><span style="text-decoration: none; color: rgb(0, 0, 0); display: inline-block; cursor: pointer; padding-left: 0px; padding-right: 0px; width: 16px;" class="stButton"><span class="chicklets facebook">&nbsp;</span></span></span>
+<span st_url="http://www.webomelette.com/creating-custom-views-field-drupal-8" st_title="Creating a custom Views field in Drupal 8" class="st_twitter" st_via="drupalexp" st_processed="yes"><span style="text-decoration: none; color: rgb(0, 0, 0); display: inline-block; cursor: pointer; padding-left: 0px; padding-right: 0px; width: 16px;" class="stButton"><span class="chicklets twitter">&nbsp;</span></span></span>
+<span st_url="http://www.webomelette.com/creating-custom-views-field-drupal-8" st_title="Creating a custom Views field in Drupal 8" class="st_googleplus" st_processed="yes"><span style="text-decoration: none; color: rgb(0, 0, 0); display: inline-block; cursor: pointer; padding-left: 0px; padding-right: 0px; width: 16px;" class="stButton"><span class="chicklets googleplus">&nbsp;</span></span></span>
+<script type="text/javascript">var switchTo5x = true;</script><script type="text/javascript" src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/buttons.js"></script><script type="text/javascript">stLight.options({"publisher":"dr-8de6c3c4-3462-9715-caaf-ce2c161a50c"});</script></div></div>
+</div>
+        
+              </div>
+      </header>
+    
+<div class="top-adsense-bar">
+</div>
+
+<div class="field field-name-body field-type-text-with-summary field-label-hidden"><div class="field-items"><div class="field-item even"><p>In this article I am going to show you how to create a custom Views field in Drupal 8. At the end of this tutorial, you will be able to add a new field to any node based View which will flag (by displaying a specific message) the nodes of a particular type (configurable in the field configuration). Although I will use nodes, you can use this example to create custom fields for other entities as well.</p>
+
+<p>So let's get started by creating a small module called <code>d8views</code> (which you can also find in <a href="https://github.com/upchuk/d8views">this repository</a>):</p>
+
+<p><strong>d8views.info.yml:</strong></p>
+
+<pre><code>name: Drupal 8 Views Demo
+description: 'Demo module that illustrates working with the Drupal 8 Views API'
+type: module
+core: 8.x
+</code></pre>
+
+<p>In Drupal 7, whenever we want to create a custom field, filter, relationship, etc for Views, we need to implement <a href="https://api.drupal.org/api/views/views.api.php/function/hook_views_api/7">hook_views_api()</a> and declare the version of Views we are using. That is <a href="https://www.drupal.org/node/1875596">no longer necessary</a> in Drupal 8. What we do now is create a file called <code>module_name.views.inc</code> in the root of our module and implement the views related hooks there.</p>
+
+<p>To create a custom field for the node entity, we need to implement <a href="https://api.drupal.org/api/drupal/core%21modules%21views%21views.api.php/function/hook_views_data_alter/8">hook_views_data_alter()</a>:</p>
+
+<p><strong>d8views.views.inc:</strong></p>
+
+<pre><code>/**
+ * Implements hook_views_data_alter().
+ */
+function d8views_views_data_alter(array &amp;$data) {
+  $data['node']['node_type_flagger'] = array(
+    'title' =&gt; t('Node type flagger'),
+    'field' =&gt; array(
+      'title' =&gt; t('Node type flagger'),
+      'help' =&gt; t('Flags a specific node type.'),
+      'id' =&gt; 'node_type_flagger',
+    ),
+  );
+}
+</code></pre>
+
+<p>In this implementation we extend the <code>node</code> table definition by adding a new field called <code>node_type_flagger</code>. Although there are many more options you can specify here, these will be enough for our purpose. The most important thing to remember is the <code>id</code> key (under <code>field</code>) which marks the id of the views plugin that will be used to handle this field. In Drupal 7 we have instead a <code>handler</code> key in which we specify the class name.</p>
+
+<p>In Drupal 8 we have something called <a href="https://drupalize.me/blog/201409/unravelling-drupal-8-plugin-system">plugins</a> and many things have now been converted to plugins, including views handlers. So let's define ours inside the <code>src/Plugin/views/field</code> folder of our module:</p>
+
+<p><strong>src/Plugin/views/field/NodeTypeFlagger.php</strong></p>
+
+<pre><code>&lt;?php
+
+/**
+ * @file
+ * Definition of Drupal\d8views\Plugin\views\field\NodeTypeFlagger
+ */
+
+namespace Drupal\d8views\Plugin\views\field;
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\Entity\NodeType;
+use Drupal\views\Plugin\views\field\FieldPluginBase;
+use Drupal\views\ResultRow;
+
+/**
+ * Field handler to flag the node type.
+ *
+ * @ingroup views_field_handlers
+ *
+ * @ViewsField("node_type_flagger")
+ */
+class NodeTypeFlagger extends FieldPluginBase {
+
+  /**
+   * @{inheritdoc}
+   */
+  public function query() {
+    // Leave empty to avoid a query on this field.
+  }
+
+  /**
+   * Define the available options
+   * @return array
+   */
+  protected function defineOptions() {
+    $options = parent::defineOptions();
+    $options['node_type'] = array('default' =&gt; 'article');
+
+    return $options;
+  }
+
+  /**
+   * Provide the options form.
+   */
+  public function buildOptionsForm(&amp;$form, FormStateInterface $form_state) {
+    $types = NodeType::loadMultiple();
+    $options = [];
+    foreach ($types as $key =&gt; $type) {
+      $options[$key] = $type-&gt;label();
+    }
+    $form['node_type'] = array(
+      '#title' =&gt; $this-&gt;t('Which node type should be flagged?'),
+      '#type' =&gt; 'select',
+      '#default_value' =&gt; $this-&gt;options['node_type'],
+      '#options' =&gt; $options,
+    );
+
+    parent::buildOptionsForm($form, $form_state);
+  }
+
+  /**
+   * @{inheritdoc}
+   */
+  public function render(ResultRow $values) {
+    $node = $values-&gt;_entity;
+    if ($node-&gt;bundle() == $this-&gt;options['node_type']) {
+      return $this-&gt;t('Hey, I\'m of the type: @type', array('@type' =&gt; $this-&gt;options['node_type']));
+    }
+    else {
+      return $this-&gt;t('Hey, I\'m something else.');
+    }
+  }
+}
+</code></pre>
+
+<p></p><div id="block-inject-2" class="block-inject block-inject-2"><section id="block-block-39--2" class="block block-block clearfix">
+
+      
+  <script type="text/javascript">
+<!--//--><![CDATA[// ><!--
+<!--
+google_ad_client = "ca-pub-5045587796677888";
+/* Top long banner - 728 */
+google_ad_slot = "9037770649";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+
+//--><!]]>
+</script><script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+<!--//--><![CDATA[// ><!--
+
+
+//--><!]]>
+</script>  
+</section> <!-- /.block -->
+</div><div class="clearfix"></div><p>We are defining our <code>NodeTypeFlagger</code> class that extends <code>FieldPluginBase</code> (which is the base plugin abstract class for the views field many plugins extend from). Just above the class declaration we use the <a href="https://api.drupal.org/api/drupal/core!modules!views!src!Annotation!ViewsField.php/class/ViewsField/8">@ViewsField</a> annotation to specify the id of this plugin (the same one we declared in the <code>hook_views_data_alter()</code> implementation). We also use the <code>@ingroup</code> annotation to mark that this is a views field handler.</p>
+
+<p>In our example class, we have 4 methods (all overriding the parent class ones).</p>
+
+<h3>Query</h3>
+
+<p>First, we override the <code>query()</code> method but leave it empty. This is so that views does not try to include this field in the regular node table query (since the field is not backed by a table column).</p>
+
+<h3>DefineOptions</h3>
+
+<p>The second method is the <code>defineOptions()</code> method through which we specify what configuration options we need for this field. In our case one is enough: we need to specify the node type which we want flagged in the Views results. We set a sensible default as the <code>article</code> node type.</p>
+
+<h3>BuildOptionsForm</h3>
+
+<p>The third method, <code>buildOptionsForm()</code> is responsible for creating the form for the configuration options we declared earlier. In our case we just have a select list with which we can choose from the existing node types.</p>
+
+<h3>Render</h3>
+
+<p>Lastly, the <code>render()</code> method which is the most important and which deals with output. We use it to actually render the content of the field for each result. Here is where we perform some business logic based on the currently set node type option and flag with a message whether or not the current result is in fact of the type specified in the configuration.</p>
+
+<p>The <code>$resultRow</code> object is an instance of <code>Drupal\views\ResultRow</code> which contains data returned for the current row by Views and the entity object at the base of the query (in our case the node). Based on this information we can perform our logic.</p>
+
+<p>Keep in mind you can use <a href="http://www.webomelette.com/drupal-8-dependency-injection-service-container-and-all-jazz">depedency injection</a> to inject all sorts of services into this class and make use of them in your logic. Additionally, you can override various other methods of the parent class in order to further customize your field.</p>
+
+<h2>Conclusion</h2>
+
+<p>There you have it. A small custom module that demonstrates how to create a custom Views field (plugin). Relationships, filters, sorters and others work in similar way. I will be covering those in later articles. Stay tuned.</p>
+</div></div></div>
+      <footer>
+            <ul class="links inline"><li class="comment-add first last active"><a href="http://www.webomelette.com/creating-custom-views-field-drupal-8#comment-form" title="Share your thoughts and opinions related to this posting." class="active">Add new comment</a></li>
+</ul>    </footer>
+  
+  <section id="comments" class="comment-wrapper">
+          <h2 class="title">Comments</h2>
+      
+  <a id="comment-1669"></a>
+<article class="comment comment-by-anonymous odd">
+  
+  <header>
+    <p class="submitted">
+      
+      Submitted by <span class="username">Luc (not verified)</span> on Thu, 06/11/2015 - 15:07      <a href="http://www.webomelette.com/comment/1669#comment-1669" class="permalink" rel="bookmark">Permalink</a>    </p>
+
+              <h3>
+        <a href="http://www.webomelette.com/comment/1669#comment-1669" class="permalink" rel="bookmark">Where do we find the field</a>              </h3>
+          </header>
+
+  <div class="field field-name-comment-body field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p>Hello,</p>
+<p>First of all, thank you for all the tutorial you have done on Drupal 8.</p>
+<p>I followed the guide but I can't figure out where the field should be added. Could you give me more precision about this.</p>
+<p>Thank you !</p>
+</div></div></div>
+  
+  <ul class="links inline"><li class="comment-reply first last"><a href="http://www.webomelette.com/comment/reply/900/1669">reply</a></li>
+</ul></article> <!-- /.comment -->
+
+<div class="indented"><a id="comment-1686"></a>
+<article class="comment comment-by-anonymous even">
+  
+  <header>
+    <p class="submitted">
+      
+      Submitted by <span class="username">DeeZone (not verified)</span> on Tue, 06/30/2015 - 06:50      <a href="http://www.webomelette.com/comment/1686#comment-1686" class="permalink" rel="bookmark">Permalink</a>    </p>
+
+              <h3>
+        <a href="http://www.webomelette.com/comment/1686#comment-1686" class="permalink" rel="bookmark">How to add "Node Type Flagger" field to View</a>              </h3>
+          </header>
+
+  <div class="field field-name-comment-body field-type-text-long field-label-hidden"><div class="field-items"><div class="field-item even"><p>How to add "Node Type Flagger" field to View</p>
+<p>1. Once all files have been created in custom module based on article, clear site cache<br>
+2. Edit a View, add "Node Type Flagger" to view "fields"<br>
+3. When adding "Node Type Flagger" field, select node type in settings of a node type that will be listing in the view output based on other "FILTER CRITERIA".<br>
+4. Review view output. A new column in the view output will be listed called "NODE TYPE FLAGGER".<br>
+5. Each row will have the "Hey, I'm of the type: " or "Hey, I\'m something else." text listed based on the settings for the field.</p>
+<p>Content: Node type flagger</p>
+</div></div></div>
+  
+  <ul class="links inline"><li class="comment-reply first last"><a href="http://www.webomelette.com/comment/reply/900/1686">reply</a></li>
+</ul></article> <!-- /.comment -->
+</div>
+      <section id="comment-form-wrapper" class="well">
+      <h2 class="title">Add new comment</h2>
+      <form class="comment-form user-info-from-cookie user-info-from-cookie-processed" action="http://www.webomelette.com/comment/reply/900" method="post" id="comment-form" accept-charset="UTF-8"><div><div class="control-group form-type-textfield form-item-name form-item">
+  <label for="edit-name" class="control-label">Your name </label>
+<div class="controls"> <input type="text" id="edit-name" name="name" value="" size="30" maxlength="60" class="form-text">
+</div></div>
+<div class="control-group form-type-textfield form-item-mail form-item">
+  <label for="edit-mail" class="control-label">E-mail </label>
+<div class="controls"> <input type="text" id="edit-mail" name="mail" value="" size="30" maxlength="64" class="form-text">
+<p class="help-block">The content of this field is kept private and will not be shown publicly.</p>
+</div></div>
+<div class="control-group form-type-textfield form-item-subject form-item">
+  <label for="edit-subject" class="control-label">Subject </label>
+<div class="controls"> <input type="text" id="edit-subject" name="subject" value="" size="60" maxlength="64" class="form-text">
+</div></div>
+<div class="field-type-text-long field-name-comment-body field-widget-text-textarea form-wrapper" id="edit-comment-body"><div id="comment-body-add-more-wrapper"><div class="text-format-wrapper"><div class="control-group form-type-textarea form-item-comment-body-und-0-value form-item">
+  <label for="edit-comment-body-und-0-value" class="control-label">Comment <span class="form-required" title="This field is required.">*</span></label>
+<div class="controls"> <div class="form-textarea-wrapper resizable textarea-processed resizable-textarea"><textarea class="text-full form-textarea required" id="edit-comment-body-und-0-value" name="comment_body[und][0][value]" cols="60" rows="5"></textarea><div class="grippie"></div></div>
+</div></div>
+<fieldset class="filter-wrapper form-wrapper" id="edit-comment-body-und-0-format"><div class="fieldset-wrapper"><div class="filter-help form-wrapper" id="edit-comment-body-und-0-format-help"><p><a href="http://www.webomelette.com/filter/tips" target="_blank">More information about text formats</a></p></div><div class="control-group form-type-select form-item-comment-body-und-0-format form-item">
+  <label for="edit-comment-body-und-0-format--2" class="control-label">Text format </label>
+<div class="controls"> <select class="filter-list form-select" id="edit-comment-body-und-0-format--2" name="comment_body[und][0][format]"><option value="filtered_html" selected="selected">Filtered HTML</option><option value="plain_text">Plain text</option></select>
+</div></div>
+<div class="filter-guidelines form-wrapper filter-guidelines-processed" id="edit-comment-body-und-0-format-guidelines"><div class="filter-guidelines-item filter-guidelines-filtered_html" style="display: block;"><h3 style="display: none;">Filtered HTML</h3><ul class="tips"><li>Web page addresses and e-mail addresses turn into links automatically.</li><li>Allowed HTML tags: &lt;a&gt; &lt;em&gt; &lt;strong&gt; &lt;cite&gt; &lt;blockquote&gt; &lt;code&gt; &lt;ul&gt; &lt;ol&gt; &lt;li&gt; &lt;dl&gt; &lt;dt&gt; &lt;dd&gt;</li><li>Lines and paragraphs break automatically.</li></ul></div><div class="filter-guidelines-item filter-guidelines-plain_text" style="display: none;"><h3 style="display: none;">Plain text</h3><ul class="tips"><li>No HTML tags allowed.</li><li>Web page addresses and e-mail addresses turn into links automatically.</li><li>Lines and paragraphs break automatically.</li></ul></div></div></div></fieldset>
+</div>
+</div></div><input type="hidden" name="form_build_id" value="form-0wZqKhWQhlzTmw4TnxupQlunTbC_VgLlnjqHHGFPyGE">
+<input type="hidden" name="form_id" value="comment_node_article_form">
+<div class="form-type-checkbox form-item-notify form-item">
+  <label class="option checkbox control-label" for="edit-notify"> <input type="checkbox" id="edit-notify" name="notify" value="1" class="form-checkbox">Notify me when new comments are posted </label>
+
+</div>
+<div id="edit-notify-type" class="form-radios" style="display: none;"><div class="form-type-radio form-item-notify-type form-item">
+  <label class="option radio" for="edit-notify-type-1"> <input type="radio" id="edit-notify-type-1" name="notify_type" value="1" checked="checked" class="form-radio">All comments </label>
+
+</div>
+<div class="form-type-radio form-item-notify-type form-item">
+  <label class="option radio" for="edit-notify-type-2"> <input type="radio" id="edit-notify-type-2" name="notify_type" value="2" class="form-radio">Replies to my comment </label>
+
+</div>
+</div><button class="btn btn-primary form-submit" id="edit-submit" name="op" value="Save" type="submit">Save</button>
+<button class="btn form-submit" id="edit-preview" name="op" value="Preview" type="submit">Preview</button>
+<input class="mollom-content-id" type="hidden" name="mollom[contentId]" value="">
+<input class="mollom-captcha-id" type="hidden" name="mollom[captchaId]" value="">
+<div style="display: none;"><div class="control-group form-type-textfield form-item-mollom-homepage form-item">
+<div class="controls"> <input autocomplete="off" type="text" id="edit-mollom-homepage" name="mollom[homepage]" value="" size="60" maxlength="128" class="form-text">
+</div></div>
+</div><div class="description mollom-privacy">By submitting this form, you accept the <a href="https://mollom.com/web-service-privacy-policy" class="mollom-target" rel="nofollow">Mollom privacy policy</a>.</div><div class="url-textfield"><div class="control-group form-type-textfield form-item-url form-item">
+  <label for="edit-url" class="control-label">Leave this field blank </label>
+<div class="controls"> <input autocomplete="off" type="text" id="edit-url" name="url" value="" size="20" maxlength="128" class="form-text">
+</div></div>
+</div></div></form>    </section> <!-- /#comment-form-wrapper -->
+  </section> <!-- /#comments -->
+
+</article> <!-- /.node -->
+    </section>
+
+          <aside class="span3" role="complementary">
+          <div class="region region-sidebar-second">
+    <section id="block-block-16" class="block block-block clearfix">
+
+        <h2 class="block-title">What is this?</h2>
+    
+  <p>Web Omelette is a Drupal blog that covers topics related to Drupal and how to do stuff with it, modules and themes as well as their development. </p>
+<h2>Categories</h2>
+<ul><li><a href="http://www.webomelette.com/drupal-8">Drupal 8</a></li>
+<li><a href="http://www.webomelette.com/drupal-hooks">Drupal Hooks</a></li>
+<li><a href="http://www.webomelette.com/drupal-theming">Theming</a></li>
+<li><a href="http://www.webomelette.com/cool-drupal-module">Cool Modules</a></li>
+<li><a href="http://www.webomelette.com/drupal-commerce">Drupal Commerce</a></li>
+<li><a href="http://www.webomelette.com/drupal-multilingual">Multilingual</a></li>
+<li><a href="http://www.webomelette.com/guest-posts">Guest Posts</a></li>
+<li><a href="http://www.webomelette.com/web-development">Web Development</a></li>
+</ul>  
+</section> <!-- /.block -->
+<section id="block-search-form" class="block block-search clearfix">
+
+      
+  <form class="form-search content-search" action="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/Creating a custom Views field in Drupal 8 _ Web Omelette.html" method="post" id="search-block-form" accept-charset="UTF-8"><div><div class="container-inline">
+      <h2 class="element-invisible">Search form</h2>
+    <div class="input-append"><input title="Enter the terms you wish to search for." class="search-query span2 form-text" placeholder="Search" type="text" id="edit-search-block-form--2" name="search_block_form" value="" size="15" maxlength="128"><button type="submit" class="btn"><i class="icon-search icon-white"></i><span class="element-invisible">Search</span></button></div><button class="element-invisible btn btn-primary form-submit" id="edit-submit--2" name="op" value="Search" type="submit">Search</button>
+<input type="hidden" name="form_build_id" value="form-VVQnIm3uQGzl3vHsFq2BPLc21_mKG2naEYxUdg5UGY8">
+<input type="hidden" name="form_id" value="search_block_form">
+</div>
+</div></form>  
+</section> <!-- /.block -->
+<section id="block-block-27" class="block block-block clearfix">
+
+      
+  <script type="text/javascript">
+<!--//--><![CDATA[// ><!--
+<!--
+google_ad_client = "ca-pub-5045587796677888";
+/* 300x250 Sidebar */
+google_ad_slot = "5108898253";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+
+//--><!]]>
+</script><script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+<!--//--><![CDATA[// ><!--
+
+
+//--><!]]>
+</script>  
+</section> <!-- /.block -->
+<section id="block-views-same-category-block" class="block block-views clearfix">
+
+        <h2 class="block-title">Some recent articles</h2>
+    
+  <div class="view view-same-category view-id-same_category view-display-id-block view-dom-id-2dafe809ca77ff3e4a3c0a5a55831efe">
+        
+  
+  
+      <div class="view-content">
+        <div class="views-row views-row-1 views-row-odd views-row-first">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="http://www.webomelette.com/new-contrib-module-info-plugins">New contrib module: Info Plugins</a></span>  </div>  
+  <div class="views-field views-field-name">        <span class="field-content">By <span class="username">Daniel Sipos</span>, 2 weeks 6 days ago</span>  </div>  </div>
+  <div class="views-row views-row-2 views-row-even">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="http://www.webomelette.com/write-your-own-views-bulk-operations-actions-drupal-7">Write your own Views Bulk Operations actions in Drupal 7</a></span>  </div>  
+  <div class="views-field views-field-name">        <span class="field-content">By <span class="username">Daniel Sipos</span>, 4 weeks 4 hours ago</span>  </div>  </div>
+  <div class="views-row views-row-3 views-row-odd">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="http://www.webomelette.com/go-custom-or-use-contributed-module">Go custom or use a contributed module?</a></span>  </div>  
+  <div class="views-field views-field-name">        <span class="field-content">By <span class="username">Daniel Sipos</span>, 2 months 3 days ago</span>  </div>  </div>
+  <div class="views-row views-row-4 views-row-even">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="http://www.webomelette.com/drupal-8-custom-data-configuration-entities-using-thirdpartysettingsinterface">Drupal 8: custom data on configuration entities using the ThirdPartySettingsInterface</a></span>  </div>  
+  <div class="views-field views-field-name">        <span class="field-content">By <span class="username">Daniel Sipos</span>, 2 months 2 weeks ago</span>  </div>  </div>
+  <div class="views-row views-row-5 views-row-odd views-row-last">
+      
+  <div class="views-field views-field-title">        <span class="field-content"><a href="http://www.webomelette.com/creating-pseudo-fields-drupal-8">Creating pseudo-fields in Drupal 8</a></span>  </div>  
+  <div class="views-field views-field-name">        <span class="field-content">By <span class="username">Daniel Sipos</span>, 3 months 4 hours ago</span>  </div>  </div>
+    </div>
+  
+  
+  
+  
+  
+  
+</div>  
+</section> <!-- /.block -->
+<section id="block-comment-recent" class="block block-comment clearfix">
+
+        <h2 class="block-title">Recent comments</h2>
+    
+  <ul><li class="first"><a href="http://www.webomelette.com/comment/1711#comment-1711">Any site builders who feel</a>&nbsp;<span>1 week 3 days ago</span></li>
+<li><a href="http://www.webomelette.com/comment/1710#comment-1710">Good Explanation</a>&nbsp;<span>1 week 4 days ago</span></li>
+<li><a href="http://www.webomelette.com/comment/1708#comment-1708">Well the action definition is</a>&nbsp;<span>3 weeks 4 days ago</span></li>
+<li><a href="http://www.webomelette.com/comment/1707#comment-1707">need module support?</a>&nbsp;<span>3 weeks 4 days ago</span></li>
+<li class="last"><a href="http://www.webomelette.com/comment/1706#comment-1706">Settings</a>&nbsp;<span>3 weeks 6 days ago</span></li>
+</ul>  
+</section> <!-- /.block -->
+<section id="block-block-30" class="block block-block clearfix">
+
+      
+  <div style="display:none" id="eXTReMe"><a href="http://extremetracking.com/open?login=mydrupal"><br><img src="" style="border: 0;">
+height="38" width="41" id="EXim" alt="eXTReMe Tracker" /&gt;</a>
+<script type="text/javascript">
+<!--//--><![CDATA[// ><!--
+<!--
+EXref="";top.document.referrer?EXref=top.document.referrer:EXref=document.referrer;//-->
+
+//--><!]]>
+</script><script type="text/javascript">
+<!--//--><![CDATA[// ><!--
+<!--
+var EXlogin='mydrupal' // Login
+var EXvsrv='s10' // VServer
+EXs=screen;EXw=EXs.width;navigator.appName!="Netscape"?
+EXb=EXs.colorDepth:EXb=EXs.pixelDepth;EXsrc="src";
+navigator.javaEnabled()==1?EXjv="y":EXjv="n";
+EXd=document;EXw?"":EXw="na";EXb?"":EXb="na";
+EXref?EXref=EXref:EXref=EXd.referrer;
+EXd.write("<img "+EXsrc+"=http://e1.extreme-dm.com",
+"/"+EXvsrv+".g?login="+EXlogin+"&amp;",
+"jv="+EXjv+"&amp;j=y&amp;srw="+EXw+"&amp;srb="+EXb+"&amp;",
+"l="+escape(EXref)+" height=1 width=1>");//-->
+
+//--><!]]>
+</script><img src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/s10.g" height="1" width="1"><p></p><noscript>&lt;br /&gt;&lt;div id="neXTReMe"&gt;&lt;img height="1" width="1" alt="" /&gt;
+src="http://e1.extreme-dm.com/s10.g?login=mydrupal&amp;amp;j=n&amp;amp;jv=n" /&amp;gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;/p&gt;</noscript></div>
+  
+</section> <!-- /.block -->
+  </div>
+      </aside>  <!-- /#sidebar-second -->
+    
+  </div>
+</div>
+<footer class="footer container">
+    <div class="region region-footer">
+    <section id="block-system-powered-by" class="block block-system clearfix">
+
+      
+  <span>Powered by <a href="https://www.drupal.org/">Drupal</a></span>  
+</section> <!-- /.block -->
+  </div>
+</footer>
+  <script src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/js__ehR7E2dxzuvqcTekR9TW4pTigTyT3ER48323ak0_KkM__KJ76srg6t66Xy2WVpMPUdTb2zfLQeXnNunyaBLBe1ss__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.js"></script>
+<script src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/bootstrap.min.js"></script>
+<script>/* Output by FitVids module */
+(function ($) {
+    Drupal.behaviors.fitvids = {
+      attach: function (context, settings) {
+if ($(".media-youtube-outer-wrapper").length) {
+ $(".media-youtube-outer-wrapper").removeAttr("style");
+ $(".media-youtube-preview-wrapper").removeAttr("style");
+ $(".media-youtube-outer-wrapper").removeClass("media-youtube-outer-wrapper");
+ $(".media-youtube-preview-wrapper").removeClass("media-youtube-preview-wrapper");
+}
+if ($(".media-vimeo-outer-wrapper").length) {
+ $(".media-vimeo-outer-wrapper").removeAttr("style");
+ $(".media-vimeo-preview-wrapper").removeAttr("style");
+ $(".media-vimeo-outer-wrapper").removeClass("media-vimeo-outer-wrapper");
+ $(".media-vimeo-preview-wrapper").removeClass("media-vimeo-preview-wrapper");
+}
+$(".node-article", context).fitVids();
+}
+      };
+    }(jQuery));</script>
+<script src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/js__MZAPBJ4GvaSEJ4HTyjmOryTbmbq7IOuA34QngZQJayU__DvSScpBexH2b0al9OuD9DuBdl_ekCJLTX1IX6ZORuIg__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.js"></script>
+<script src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/js__bsv7D9Cd4WMpkhuggSVzX0ZjGCq9csvoxMbGJM7CXaE__zGSKfKLHBZKhc5aVTFjT_9ZsRC9pz4UgtwSpUwbhoZg__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.js"></script>
+<script src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/js__xzn7CzRgDCNKnwPt_UNtb2DwPgrI4qK7-SQuPXbgrOk__CxQ9cctNKGvZw-IOSsxmeuLR5C8VHwKgSZ3wU9-XiLA__U8fUmTqjmfChVWgoBOaAthz18j3TCrmdTckta3571kY.js"></script>
+
+
+<div id="stcpDiv" style="position: absolute; top: -1999px; left: -1988px;">ShareThis Copy and Paste</div><iframe id="stSegmentFrame" name="stSegmentFrame" src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/getSegment.html" frameborder="0" scrolling="no" width="0px" height="0px" style="display:none;"></iframe><div id="stwrapper" class="stwrapper stwrapper5x" style="display: none;"><iframe allowtransparency="true" id="stLframe" class="stLframe" name="stLframe" frameborder="0" scrolling="no" src="./Creating a custom Views field in Drupal 8 _ Web Omelette_files/index.3c401b929c426b4aced880852aeb0d98.html"></iframe></div><div id="stOverlay" onclick="javascript:stWidget.closeWidget();"></div></body></html>
